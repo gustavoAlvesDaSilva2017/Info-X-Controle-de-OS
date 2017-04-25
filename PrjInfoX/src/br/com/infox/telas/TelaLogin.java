@@ -33,15 +33,15 @@ public class TelaLogin extends javax.swing.JFrame {
                 if (perfil.equals("admin")) {
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
-                    TelaPrincipal.menuRelatorio.setEnabled(true);
-                    TelaPrincipal.menuCadastroUsuarios.setEnabled(true);
-                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
-                    TelaPrincipal.lblUsuario.setForeground(Color.red);
+                    TelaPrincipal.jMiRelatServ.setEnabled(true);
+                    TelaPrincipal.jMiCadUser.setEnabled(true);
+                    TelaPrincipal.jLblUser.setText(rs.getString(2));
+                    TelaPrincipal.jLblUser.setForeground(Color.red);
                     this.dispose();
                 } else {
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
-                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
+                    TelaPrincipal.jLblUser.setText(rs.getString(2));
                     this.dispose();
                 }
             } else {
@@ -61,12 +61,12 @@ public class TelaLogin extends javax.swing.JFrame {
         conexao = ModuloConexao.conector();
         //System.out.println(conexao); 
         if (conexao != null) {
-            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_ok 32.png")));
+            jLblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_ok 32.png")));
         } else {
-            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_error 32.png")));
+            jLblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_error 32.png")));
             jTfUsuario.setEnabled(false);
             jPfSenha.setEnabled(false);
-            btnLogin.setEnabled(false);
+            jBtnLogin.setEnabled(false);
 
         }
     }
@@ -83,9 +83,9 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTfUsuario = new javax.swing.JTextField();
-        btnLogin = new javax.swing.JButton();
+        jBtnLogin = new javax.swing.JButton();
         jPfSenha = new javax.swing.JPasswordField();
-        lblStatus = new javax.swing.JLabel();
+        jLblStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("X System - Login");
@@ -95,14 +95,14 @@ public class TelaLogin extends javax.swing.JFrame {
 
         jLabel2.setText("Senha");
 
-        btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        jBtnLogin.setText("Login");
+        jBtnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                jBtnLoginActionPerformed(evt);
             }
         });
 
-        lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_error 32.png"))); // NOI18N
+        jLblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/db_error 32.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,9 +112,9 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblStatus)
+                        .addComponent(jLblStatus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jBtnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
@@ -142,8 +142,8 @@ public class TelaLogin extends javax.swing.JFrame {
                     .addComponent(jPfSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblStatus)
-                    .addComponent(btnLogin))
+                    .addComponent(jLblStatus)
+                    .addComponent(jBtnLogin))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -151,9 +151,9 @@ public class TelaLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void jBtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoginActionPerformed
         logar();
-    }//GEN-LAST:event_btnLoginActionPerformed
+    }//GEN-LAST:event_jBtnLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,11 +191,11 @@ public class TelaLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton jBtnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLblStatus;
     private javax.swing.JPasswordField jPfSenha;
     private javax.swing.JTextField jTfUsuario;
-    private javax.swing.JLabel lblStatus;
     // End of variables declaration//GEN-END:variables
 }
