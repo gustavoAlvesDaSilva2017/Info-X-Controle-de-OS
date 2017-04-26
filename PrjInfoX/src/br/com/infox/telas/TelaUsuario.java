@@ -4,18 +4,51 @@
  * and open the template in the editor.
  */
 package br.com.infox.telas;
+import java.sql.*;
+import br.com.infox.dal.ModuloConexao;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author jfaix_000
- */
 public class TelaUsuario extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form TelaUsuario
-     */
+    
+    Connection conexao = null;
+
+    // Classe de apoio para o banco de dados
+    PreparedStatement pst = null;
+    ResultSet rs = null; // resultados das conexões sql
+   
     public TelaUsuario() {
         initComponents();
+        conexao = ModuloConexao.conector();
+    }
+    
+    private void consultar() {
+        String sql = "SELECT * FROM tbusuarios WHERE iduser=?";
+        
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, jTfId.getText());
+            rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                jTfNomeUsuario.setText(rs.getString(2));
+                jTfTelefone.setText(rs.getString(3));
+                jTfLogin.setText(rs.getString(4));
+                jPfSenha.setText(rs.getString(5));
+                jCbPerfil.setSelectedItem(rs.getString(6));
+            } else {
+                jTfId.setText("");
+                jTfNomeUsuario.setText("");
+                jTfTelefone.setText("");
+                jTfLogin.setText("");
+                jPfSenha.setText("");
+                jCbPerfil.setSelectedIndex(0);
+                JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
+                jTfId.requestFocus();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     /**
@@ -72,6 +105,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jBtnPesqUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/read.png"))); // NOI18N
         jBtnPesqUser.setToolTipText("Pesquisar");
         jBtnPesqUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnPesqUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnPesqUserActionPerformed(evt);
+            }
+        });
 
         jBtnEditUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/update.png"))); // NOI18N
         jBtnEditUser.setToolTipText("Editar");
@@ -159,18 +197,23 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                         .addGap(5, 5, 5)
                         .addComponent(jLabel6))
                     .addComponent(jCbPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jBtnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtnPesqUser, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBtnDltUser, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jBtnDltUser, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnAddUser, jBtnDltUser, jBtnEditUser, jBtnPesqUser});
 
         setBounds(0, 0, 550, 460);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBtnPesqUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPesqUserActionPerformed
+        consultar();
+    }//GEN-LAST:event_jBtnPesqUserActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
