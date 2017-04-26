@@ -52,6 +52,7 @@ public class TelaLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro: " + e);
         }
     }
+    
 
     /**
      * Creates new form TelaLogin
