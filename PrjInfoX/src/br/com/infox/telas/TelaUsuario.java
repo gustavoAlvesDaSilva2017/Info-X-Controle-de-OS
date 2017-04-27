@@ -7,7 +7,6 @@ package br.com.infox.telas;
 
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
-import com.mysql.jdbc.exceptions.MySQLInvalidAuthorizationSpecException;
 import javax.swing.JOptionPane;
 
 public class TelaUsuario extends javax.swing.JInternalFrame {
@@ -122,7 +121,36 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-
+    
+    private void remover() {
+        // confirmação da remoção;
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que desja remover este usuário?","Atenção",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+        
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "DELETE FROM tbusuarios WHERE iduser=?";
+            
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, jTfId.getText());
+                
+                int excluido = pst.executeUpdate();
+                
+                if (excluido > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso!!");
+                    
+                    jTfId.setText("");
+                    jTfNomeUsuario.setText("");
+                    jTfTelefone.setText("");
+                    jTfLogin.setText("");
+                    jPfSenha.setText("");
+                    jCbPerfil.setSelectedIndex(0);
+                    jTfId.requestFocus();
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -201,6 +229,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jBtnDltUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/delete.png"))); // NOI18N
         jBtnDltUser.setToolTipText("Excluir");
         jBtnDltUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnDltUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDltUserActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("* Campos obrigatórios");
 
@@ -317,6 +350,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void jBtnEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditUserActionPerformed
         alterar();
     }//GEN-LAST:event_jBtnEditUserActionPerformed
+
+    private void jBtnDltUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDltUserActionPerformed
+        remover();
+    }//GEN-LAST:event_jBtnDltUserActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
