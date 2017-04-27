@@ -88,6 +88,41 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         }
     }
 
+    private void alterar() {
+        String sql = "UPDATE tbusuarios SET usuario=?, fone=?, login=?, senha=?, perfil=? WHERE iduser=?";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, jTfNomeUsuario.getText());
+            pst.setString(2, jTfTelefone.getText());
+            pst.setString(3, jTfLogin.getText());
+            pst.setString(4, String.valueOf(jPfSenha.getPassword()));
+            pst.setString(5, jCbPerfil.getSelectedItem().toString());
+            pst.setString(6, jTfId.getText());
+
+            if (jTfId.getText().isEmpty() || jTfNomeUsuario.getText().isEmpty() || jTfLogin.getText().isEmpty() || String.valueOf(jPfSenha.getPassword()).isEmpty()) {
+                JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
+            } else {
+                int alterado = pst.executeUpdate();
+
+                if (alterado > 0) {
+                    JOptionPane.showMessageDialog(null, "Dados do usuário alterado com sucesso!");
+
+                    jTfId.setText("");
+                    jTfNomeUsuario.setText("");
+                    jTfTelefone.setText("");
+                    jTfLogin.setText("");
+                    jPfSenha.setText("");
+                    jCbPerfil.setSelectedIndex(0);
+                    jTfId.requestFocus();
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -157,6 +192,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         jBtnEditUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/update.png"))); // NOI18N
         jBtnEditUser.setToolTipText("Editar");
         jBtnEditUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnEditUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditUserActionPerformed(evt);
+            }
+        });
 
         jBtnDltUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/delete.png"))); // NOI18N
         jBtnDltUser.setToolTipText("Excluir");
@@ -273,6 +313,10 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void jBtnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAddUserActionPerformed
         adicionar();
     }//GEN-LAST:event_jBtnAddUserActionPerformed
+
+    private void jBtnEditUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditUserActionPerformed
+        alterar();
+    }//GEN-LAST:event_jBtnEditUserActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
