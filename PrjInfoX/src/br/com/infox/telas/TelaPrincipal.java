@@ -77,6 +77,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMiCadCli.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         jMiCadCli.setText("Cliente");
+        jMiCadCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMiCadCliActionPerformed(evt);
+            }
+        });
         jMenuCad.add(jMiCadCli);
 
         jMiCadOs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
@@ -203,6 +208,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
        usuario.setVisible(true);
        jDpPrincipal.add(usuario);
     }//GEN-LAST:event_jMiCadUserActionPerformed
+
+    private void jMiCadCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMiCadCliActionPerformed
+        TelaCliente cliente = new TelaCliente();
+        cliente.setVisible(true);
+        jDpPrincipal.add(cliente);
+    }//GEN-LAST:event_jMiCadCliActionPerformed
 
     /**
      * @param args the command line arguments
