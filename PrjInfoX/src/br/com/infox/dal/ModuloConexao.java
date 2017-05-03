@@ -29,7 +29,7 @@ public class ModuloConexao {
             conexao = DriverManager.getConnection(url, user, password);
             return conexao;
         } catch (Exception e) {
-
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
             return null;
         }
     }
