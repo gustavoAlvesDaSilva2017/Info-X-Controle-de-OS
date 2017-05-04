@@ -5,19 +5,58 @@
  */
 package br.com.infox.telas;
 
+import java.sql.*;
+import br.com.infox.dal.ModuloConexao;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author gustavo
  */
 public class TelaCliente extends javax.swing.JInternalFrame {
-
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
     /**
      * Creates new form TelaCliente
      */
     public TelaCliente() {
         initComponents();
+	conexao = ModuloConexao.conector();
     }
+    
+    
+    private void adicionarCliente() {
+        String sql = "INSERT INTO tbclientes (nomecli,endcli,fonecli,emailcli) VALUES(?, ?, ?, ?)";
 
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, jTfNomeCliente.getText());
+            pst.setString(2, jTfEnderecoCliente.getText());
+            pst.setString(3, jTfTelefoneCliente.getText());
+            pst.setString(4, jTfEmailCliente.getText());
+            // validaçao dos campos obrigatórios
+            if (jTfNomeCliente.getText().isEmpty() || jTfTelefoneCliente.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
+            } else {
+                int adicionado = pst.executeUpdate();
+
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+
+                    jTfNomeCliente.setText("");
+                    jTfEnderecoCliente.setText("");
+                    jTfTelefoneCliente.setText("");
+                    jTfEmailCliente.setText("");
+                    jTfNomeCliente.requestFocus();
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,12 +114,17 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         jLabel3.setText("* Telefone");
 
-        jLabel4.setText("* E-mail");
+        jLabel4.setText(" E-mail");
 
         jBtnAdicionarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/create.png"))); // NOI18N
         jBtnAdicionarCliente.setToolTipText("Adicionar");
         jBtnAdicionarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBtnAdicionarCliente.setPreferredSize(new java.awt.Dimension(80, 80));
+        jBtnAdicionarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAdicionarClienteActionPerformed(evt);
+            }
+        });
 
         jBtnEditarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/update.png"))); // NOI18N
         jBtnEditarCliente.setToolTipText("Editar");
@@ -183,6 +227,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         setBounds(0, 0, 550, 460);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBtnAdicionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAdicionarClienteActionPerformed
+            adicionarCliente();
+    }//GEN-LAST:event_jBtnAdicionarClienteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
