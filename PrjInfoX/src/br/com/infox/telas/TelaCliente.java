@@ -8,8 +8,8 @@ package br.com.infox.telas;
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
-
-
+// a linha abaixo importa recursos da biblioteca rs2xml.jar
+import net.proteanit.sql.DbUtils;
 /**
  *
  * @author gustavo
@@ -57,6 +57,33 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
+    
+    // Método para pesquisar clientes pelo nome com filto
+    private void pesquisaClientePeloNomeComFiltro() {
+	String sql = "SELECT * FROM tbclientes WHERE nomecli LIKE ?";
+	try {
+	    pst = conexao.prepareStatement(sql);
+	    
+	    // passando o conteúdo da caixa da pesquisa para a interrogração
+	    // atenção ao % - continuação da string sql
+	    pst.setString(1, jTfPesquisarCliente.getText() + "%");
+	    rs=pst.executeQuery();
+	    
+	    // a linha abaixo usa a biblioteca r2xml.rar para preencher a tabela
+	    jTblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+	} catch (Exception e) {
+	    JOptionPane.showMessageDialog(null, e);
+	}
+    }
+    
+    // Método para setar os campos do formulário com o conteúdo da tabela
+    public void setarCampos() {
+	int setar = jTblClientes.getSelectedRow();
+	jTfNomeCliente.setText(jTblClientes.getModel().getValueAt(setar, 1).toString());
+	jTfEnderecoCliente.setText(jTblClientes.getModel().getValueAt(setar, 2).toString());
+	jTfTelefoneCliente.setText(jTblClientes.getModel().getValueAt(setar, 3).toString());
+	jTfEmailCliente.setText(jTblClientes.getModel().getValueAt(setar, 4).toString());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,9 +118,15 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         jLabel11.setText("* Campos obrigatórios");
 
+        jTfPesquisarCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTfPesquisarClienteKeyReleased(evt);
+            }
+        });
+
         jLblPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/search.png"))); // NOI18N
         jLblPesquisar.setToolTipText("Pesquisar");
-        jLblPesquisar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLblPesquisar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jTblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,6 +139,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTblClientes);
 
         jLabel1.setText("* Nome");
@@ -231,6 +269,14 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     private void jBtnAdicionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAdicionarClienteActionPerformed
             adicionarCliente();
     }//GEN-LAST:event_jBtnAdicionarClienteActionPerformed
+
+    private void jTfPesquisarClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTfPesquisarClienteKeyReleased
+	pesquisaClientePeloNomeComFiltro();
+    }//GEN-LAST:event_jTfPesquisarClienteKeyReleased
+
+    private void jTblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblClientesMouseClicked
+        setarCampos();
+    }//GEN-LAST:event_jTblClientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
