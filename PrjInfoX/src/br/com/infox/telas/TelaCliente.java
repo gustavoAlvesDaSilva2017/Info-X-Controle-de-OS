@@ -10,73 +10,75 @@ import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
 // a linha abaixo importa recursos da biblioteca rs2xml.jar
 import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author gustavo
  */
 public class TelaCliente extends javax.swing.JInternalFrame {
+
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
+
     /**
      * Creates new form TelaCliente
      */
     public TelaCliente() {
-        initComponents();
+	initComponents();
 	conexao = ModuloConexao.conector();
     }
-    
-    
+
     private void adicionarCliente() {
-        String sql = "INSERT INTO tbclientes (nomecli,endcli,fonecli,emailcli) VALUES(?, ?, ?, ?)";
+	String sql = "INSERT INTO tbclientes (nomecli,endcli,fonecli,emailcli) VALUES(?, ?, ?, ?)";
 
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, jTfNomeCliente.getText());
-            pst.setString(2, jTfEnderecoCliente.getText());
-            pst.setString(3, jTfTelefoneCliente.getText());
-            pst.setString(4, jTfEmailCliente.getText());
-            // validaçao dos campos obrigatórios
-            if (jTfNomeCliente.getText().isEmpty() || jTfTelefoneCliente.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
-            } else {
-                int adicionado = pst.executeUpdate();
+	try {
+	    pst = conexao.prepareStatement(sql);
+	    pst.setString(1, jTfNomeCliente.getText());
+	    pst.setString(2, jTfEnderecoCliente.getText());
+	    pst.setString(3, jTfTelefoneCliente.getText());
+	    pst.setString(4, jTfEmailCliente.getText());
+	    // validaçao dos campos obrigatórios
+	    if (jTfNomeCliente.getText().isEmpty() || jTfTelefoneCliente.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
+	    } else {
+		int adicionado = pst.executeUpdate();
 
-                if (adicionado > 0) {
-                    JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
-		
-                    jTfNomeCliente.setText("");
-                    jTfEnderecoCliente.setText("");
-                    jTfTelefoneCliente.setText("");
-                    jTfEmailCliente.setText("");
-                    jTfNomeCliente.requestFocus();
+		if (adicionado > 0) {
+		    JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+
+		    jTfNomeCliente.setText("");
+		    jTfEnderecoCliente.setText("");
+		    jTfTelefoneCliente.setText("");
+		    jTfEmailCliente.setText("");
+		    jTfNomeCliente.requestFocus();
 		    pesquisaClientePeloNomeComFiltro();
-                }
-            }
+		}
+	    }
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
+	} catch (Exception e) {
+	    JOptionPane.showMessageDialog(null, e);
+	}
     }
-    
+
     // Método para pesquisar clientes pelo nome com filto
     private void pesquisaClientePeloNomeComFiltro() {
 	String sql = "SELECT * FROM tbclientes WHERE nomecli LIKE ?";
 	try {
 	    pst = conexao.prepareStatement(sql);
-	    
+
 	    // passando o conteúdo da caixa da pesquisa para a interrogração
 	    // atenção ao % - continuação da string sql
 	    pst.setString(1, jTfPesquisarCliente.getText() + "%");
-	    rs=pst.executeQuery();
-	    
+	    rs = pst.executeQuery();
+
 	    // a linha abaixo usa a biblioteca r2xml.rar para preencher a tabela
 	    jTblClientes.setModel(DbUtils.resultSetToTableModel(rs));
 	} catch (Exception e) {
 	    JOptionPane.showMessageDialog(null, e);
 	}
     }
-    
+
     // Método para setar os campos do formulário com o conteúdo da tabela
     public void setarCampos() {
 	int setar = jTblClientes.getSelectedRow();
@@ -85,40 +87,80 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 	jTfEnderecoCliente.setText(jTblClientes.getModel().getValueAt(setar, 2).toString());
 	jTfTelefoneCliente.setText(jTblClientes.getModel().getValueAt(setar, 3).toString());
 	jTfEmailCliente.setText(jTblClientes.getModel().getValueAt(setar, 4).toString());
-    }
-    
-     private void alterarCliente() {
-        String sql = "UPDATE tbclientes SET nomecli=?, endcli=?, fonecli=?, emailcli=? WHERE idcli=?";
 
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, jTfNomeCliente.getText());
-            pst.setString(2, jTfEnderecoCliente.getText());
-            pst.setString(3, jTfTelefoneCliente.getText());
-            pst.setString(4, jTfEmailCliente.getText());
+	jBtnAdicionarCliente.setEnabled(false);
+    } // fim setar canpos
+
+    private void alterarCliente() {
+	String sql = "UPDATE tbclientes SET nomecli=?, endcli=?, fonecli=?, emailcli=? WHERE idcli=?";
+
+	try {
+	    pst = conexao.prepareStatement(sql);
+	    pst.setString(1, jTfNomeCliente.getText());
+	    pst.setString(2, jTfEnderecoCliente.getText());
+	    pst.setString(3, jTfTelefoneCliente.getText());
+	    pst.setString(4, jTfEmailCliente.getText());
 	    pst.setString(5, jTfIdCliente.getText());
-            if (jTfIdCliente.getText().isEmpty() || jTfNomeCliente.getText().isEmpty() || jTfTelefoneCliente.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
+	    if (jTfIdCliente.getText().isEmpty() || jTfNomeCliente.getText().isEmpty() || jTfTelefoneCliente.getText().isEmpty()) {
+		JOptionPane.showMessageDialog(null, "É necessário preencher todos os campos obrigatórios!");
 	    } else {
-                int alterado = pst.executeUpdate();
+		int alterado = pst.executeUpdate();
 
-                if (alterado > 0) {
-                    JOptionPane.showMessageDialog(null, "Dados do cliente alterados com sucesso!");
+		if (alterado > 0) {
+		    JOptionPane.showMessageDialog(null, "Dados do cliente alterados com sucesso!");
 		    
-		    jTfPesquisarCliente.setText(jTfNomeCliente.getText());
-                    jTfNomeCliente.setText("");
-                    jTfEnderecoCliente.setText("");
-                    jTfTelefoneCliente.setText("");
-                    jTfEmailCliente.setText("");
-                    jTfNomeCliente.requestFocus();
+		    jTfNomeCliente.setText("");
+		    jTfEnderecoCliente.setText("");
+		    jTfTelefoneCliente.setText("");
+		    jTfEmailCliente.setText("");
+		    jTfPesquisarCliente.setText("");
+		    jTfNomeCliente.requestFocus();
 		    pesquisaClientePeloNomeComFiltro();
-                }
-            }
+		    jBtnAdicionarCliente.setEnabled(true);
+		}
+	    }
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
+	} catch (Exception e) {
+	    JOptionPane.showMessageDialog(null, e);
+	} // fim try - catch
+    } // fim altera clientes
+
+    private void removerCliente() {
+
+	String sql = "DELETE FROM tbclientes WHERE idcli=?";
+	if (jTfIdCliente.getText().isEmpty()) {
+	    JOptionPane.showMessageDialog(null, "É necessário selecionar um cliente da tabela para poder excluí-lo");
+	} else {
+	    try {
+		pst = conexao.prepareStatement(sql);
+		pst.setString(1, jTfIdCliente.getText());
+
+		int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que desja remover este cliente?", "Atenção", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+		if (confirma == JOptionPane.YES_OPTION) {
+		    int excluido = pst.executeUpdate();
+
+		    if (excluido > 0) {
+			JOptionPane.showMessageDialog(null, "Cliente excluído com sucesso!!");
+
+			jTfIdCliente.setText("");
+			jTfNomeCliente.setText("");
+			jTfEnderecoCliente.setText("");
+			jTfTelefoneCliente.setText("");
+			jTfEmailCliente.setText("");
+			jTfNomeCliente.requestFocus();
+			pesquisaClientePeloNomeComFiltro();
+			jBtnAdicionarCliente.setEnabled(true);
+		    }
+		}
+
+	    } catch (Exception e) {
+		JOptionPane.showMessageDialog(null, e);
+	    } // fim try catch
+	}
+
+    } // fim if j option pane
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -161,8 +203,13 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         });
 
         jLblPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/search.png"))); // NOI18N
-        jLblPesquisar.setToolTipText("Pesquisar");
-        jLblPesquisar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLblPesquisar.setToolTipText("Listar Todos");
+        jLblPesquisar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLblPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLblPesquisarMouseClicked(evt);
+            }
+        });
 
         jTblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -214,6 +261,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         jBtnExcluirCliente.setToolTipText("Excluir");
         jBtnExcluirCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBtnExcluirCliente.setPreferredSize(new java.awt.Dimension(80, 80));
+        jBtnExcluirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnExcluirClienteActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Id:");
 
@@ -315,7 +367,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtnAdicionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAdicionarClienteActionPerformed
-            adicionarCliente();
+	adicionarCliente();
     }//GEN-LAST:event_jBtnAdicionarClienteActionPerformed
 
     private void jTfPesquisarClienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTfPesquisarClienteKeyReleased
@@ -323,12 +375,21 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTfPesquisarClienteKeyReleased
 
     private void jTblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblClientesMouseClicked
-        setarCampos();
+	setarCampos();
     }//GEN-LAST:event_jTblClientesMouseClicked
 
     private void jBtnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditarClienteActionPerformed
-            alterarCliente();
+	alterarCliente();
     }//GEN-LAST:event_jBtnEditarClienteActionPerformed
+
+    private void jBtnExcluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExcluirClienteActionPerformed
+	removerCliente();
+
+    }//GEN-LAST:event_jBtnExcluirClienteActionPerformed
+
+    private void jLblPesquisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLblPesquisarMouseClicked
+        pesquisaClientePeloNomeComFiltro();
+    }//GEN-LAST:event_jLblPesquisarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
