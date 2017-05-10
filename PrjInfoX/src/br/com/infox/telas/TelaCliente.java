@@ -89,6 +89,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 	jTfEmailCliente.setText(jTblClientes.getModel().getValueAt(setar, 4).toString());
 
 	jBtnAdicionarCliente.setEnabled(false);
+        jBtnEditarCliente.setEnabled(true);
+        jBtnExcluirCliente.setEnabled(true);
     } // fim setar canpos
 
     private void alterarCliente() {
@@ -117,6 +119,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 		    jTfNomeCliente.requestFocus();
 		    pesquisaClientePeloNomeComFiltro();
 		    jBtnAdicionarCliente.setEnabled(true);
+                    jBtnEditarCliente.setEnabled(false);
+                    jBtnExcluirCliente.setEnabled(false);
 		}
 	    }
 
@@ -151,6 +155,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 			jTfNomeCliente.requestFocus();
 			pesquisaClientePeloNomeComFiltro();
 			jBtnAdicionarCliente.setEnabled(true);
+                        jBtnEditarCliente.setEnabled(false);
+                        jBtnExcluirCliente.setEnabled(false);
 		    }
 		}
 
@@ -250,6 +256,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         jBtnEditarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/update.png"))); // NOI18N
         jBtnEditarCliente.setToolTipText("Editar");
         jBtnEditarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnEditarCliente.setEnabled(false);
         jBtnEditarCliente.setPreferredSize(new java.awt.Dimension(80, 80));
         jBtnEditarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,6 +267,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         jBtnExcluirCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/delete.png"))); // NOI18N
         jBtnExcluirCliente.setToolTipText("Excluir");
         jBtnExcluirCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBtnExcluirCliente.setEnabled(false);
         jBtnExcluirCliente.setPreferredSize(new java.awt.Dimension(80, 80));
         jBtnExcluirCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
